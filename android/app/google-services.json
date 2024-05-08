@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "992876789713",
+    "project_id": "qertsachat",
+    "storage_bucket": "qertsachat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:992876789713:android:93f73f3771288322f92af0",
+        "android_client_info": {
+          "package_name": "com.example.qertsa"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLWOFmha3502TXMwAZzcMrQVOrBn4CX2Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
