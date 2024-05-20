@@ -37,23 +37,23 @@ class _GroupsScreenState extends State<GroupsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             10.height,
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
-                    borderRadius: BorderRadius.circular(100)),
-                child: TextFormField(
-                  style: GoogleFonts.nunito(),
-                  decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.zero,
-                    border: OutlineInputBorder(borderSide: BorderSide.none),
-                    prefixIcon: Icon(Icons.search),
-                    hintText: "Search",
-                  ),
-                ),
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+            //   child: Container(
+            //     decoration: BoxDecoration(
+            //         color: Colors.grey.shade200,
+            //         borderRadius: BorderRadius.circular(100)),
+            //     child: TextFormField(
+            //       style: GoogleFonts.nunito(),
+            //       decoration: const InputDecoration(
+            //         contentPadding: EdgeInsets.zero,
+            //         border: OutlineInputBorder(borderSide: BorderSide.none),
+            //         prefixIcon: Icon(Icons.search),
+            //         hintText: "Search",
+            //       ),
+            //     ),
+            //   ),
+            // ),
             Expanded(
               child: Consumer<GroupScreenProvider>(
                 builder: (context, value, child) {
@@ -134,21 +134,21 @@ class _GroupsScreenState extends State<GroupsScreen> {
                                   ),
                                 ),
                               ),
-                              trailing: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Text("9.32 AM",style: GoogleFonts.nunito(),),
-                                  Container(
-                                    height: 20,
-                                    width: 20,
-                                    decoration: BoxDecoration(
-                                        color: Color(0xFF0C63EE),
-                                        borderRadius: BorderRadius.circular(100)
-                                    ),
-                                    child: Center(child: Text("3",style: GoogleFonts.nunito(color: Colors.white,fontWeight: FontWeight.bold),)),
-                                  )
-                                ],
-                              ),
+                              // trailing: Column(
+                              //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              //   children: [
+                              //     Text("9.32 AM",style: GoogleFonts.nunito(),),
+                              //     Container(
+                              //       height: 20,
+                              //       width: 20,
+                              //       decoration: BoxDecoration(
+                              //           color: Color(0xFF0C63EE),
+                              //           borderRadius: BorderRadius.circular(100)
+                              //       ),
+                              //       child: Center(child: Text("3",style: GoogleFonts.nunito(color: Colors.white,fontWeight: FontWeight.bold),)),
+                              //     )
+                              //   ],
+                              // ),
                             );
                           });
                     },);

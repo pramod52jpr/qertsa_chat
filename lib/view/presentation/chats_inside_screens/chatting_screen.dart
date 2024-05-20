@@ -15,6 +15,7 @@ import 'package:qertsa/view/components/auth_button.dart';
 import 'package:qertsa/view/presentation/chats_inside_screens/image_full_screen.dart';
 import 'package:qertsa/view/presentation/chats_inside_screens/video_call_screen.dart';
 import 'package:qertsa/view/presentation/chats_inside_screens/voice_call_screen.dart';
+import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 
 class ChattingScreen extends StatefulWidget {
   final String phoneNo;
@@ -134,27 +135,39 @@ class _ChattingScreenState extends State<ChattingScreen> {
                 return const Offstage();
               }
               List user = userDataSnapshot.data!.docs.where((element) => element['phone'] == widget.phoneNo).toList();
-            return InkWell(
-              overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent),
-              onTap: () {
-                VideoCallScreen(fcmToken: user[0]['fcm_token'],).launch(context,pageRouteAnimation: PageRouteAnimation.Slide);
-              },
-              child: const Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Icon(Icons.videocam_rounded),
-              ),
+            return Row(
+              children: [
+                InkWell(
+                  overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent),
+                  onTap: () {
+                    VideoCallScreen().launch(context,pageRouteAnimation: PageRouteAnimation.Slide);
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Icon(Icons.videocam_rounded),
+                  ),
+                ),
+                ZegoSendCallInvitationButton(
+                  resourceID: "zegouikit_call",
+                  isVideoCall: true,
+                  invitees: [
+                    ZegoUIKitUser(id: user[0]['uid'], name: user[0]['name'])
+                  ],
+                ),
+              ],
             );
           },),
-          InkWell(
-            overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent),
-            onTap: () {
-              VoiceCallScreen().launch(context,pageRouteAnimation: PageRouteAnimation.Slide);
-            },
-            child: const Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Icon(Icons.call),
-            ),
-          )
+
+          // InkWell(
+          //   overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent),
+          //   onTap: () {
+          //     VoiceCallScreen().launch(context,pageRouteAnimation: PageRouteAnimation.Slide);
+          //   },
+          //   child: const Padding(
+          //     padding: EdgeInsets.all(10.0),
+          //     child: Icon(Icons.call),
+          //   ),
+          // )
         ],
       ),
       body: SafeArea(

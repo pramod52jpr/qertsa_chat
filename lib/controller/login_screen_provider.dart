@@ -13,6 +13,7 @@ import 'package:qertsa/view/auth/agree_continue_screen.dart';
 import 'package:qertsa/view/auth/allow_notification_screen.dart';
 import 'package:qertsa/view/auth/verification_code_screen.dart';
 import 'package:qertsa/view/components/utils.dart';
+import 'package:qertsa/view/presentation/dashboard_screen.dart';
 
 class LoginScreenProvider with ChangeNotifier{
   NotificationServices notificationServices = NotificationServices();
@@ -73,7 +74,7 @@ class LoginScreenProvider with ChangeNotifier{
           cameOtp = verificationId;
           changeTimer();
           resend ? null :
-          const VerificationCodeScreen().launch(
+          VerificationCodeScreen().launch(
               context, pageRouteAnimation: PageRouteAnimation.Slide);
         },
         codeAutoRetrievalTimeout: (verificationId) {
@@ -84,7 +85,7 @@ class LoginScreenProvider with ChangeNotifier{
     notifyListeners();
   }
 
-  void verifyCode(BuildContext context)async{
+  Future verifyCode(BuildContext context)async{
     final firebaseFirestore = FirebaseFirestore.instance.collection("users");
     if(otp.text.isEmpty){
       toast("Please enter the otp");
@@ -142,14 +143,14 @@ class LoginScreenProvider with ChangeNotifier{
           "name" : name.text,
           "profileImage" : url,
         }).then((value) {
-          const AllowNotificationScreen().launch(context,pageRouteAnimation: PageRouteAnimation.Slide);
+          DashboardScreen().launch(context,pageRouteAnimation: PageRouteAnimation.Slide);
           Utils.showFlushBar(context, "Success", MessageType.success);
         });
       }else{
         await firestore.doc(auth!.uid).update({
           "name" : name.text,
         }).then((value) {
-          const AllowNotificationScreen().launch(context,pageRouteAnimation: PageRouteAnimation.Slide);
+          DashboardScreen().launch(context,pageRouteAnimation: PageRouteAnimation.Slide);
           Utils.showFlushBar(context, "Success", MessageType.success);
         });
       }

@@ -38,23 +38,23 @@ class _ChatListScreenState extends State<ChatListScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             10.height,
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
-                    borderRadius: BorderRadius.circular(100)),
-                child: TextFormField(
-                  style: GoogleFonts.nunito(),
-                  decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.zero,
-                    border: OutlineInputBorder(borderSide: BorderSide.none),
-                    prefixIcon: Icon(Icons.search),
-                    hintText: "Search",
-                  ),
-                ),
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+            //   child: Container(
+            //     decoration: BoxDecoration(
+            //         color: Colors.grey.shade200,
+            //         borderRadius: BorderRadius.circular(100)),
+            //     child: TextFormField(
+            //       style: GoogleFonts.nunito(),
+            //       decoration: const InputDecoration(
+            //         contentPadding: EdgeInsets.zero,
+            //         border: OutlineInputBorder(borderSide: BorderSide.none),
+            //         prefixIcon: Icon(Icons.search),
+            //         hintText: "Search",
+            //       ),
+            //     ),
+            //   ),
+            // ),
             Expanded(
               child: Consumer<ChatBottomBarProvider>(
                 builder: (context, value, child) {
@@ -110,7 +110,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                 itemBuilder: (context, index) {
                                   List user = userSnap.data!.docs.where((element) => auth!.phoneNumber.reverse.substring(0,10).reverse == data[index]['user1'] ? element['phone'] == data[index]['user2'] : element['phone'] == data[index]['user1'] ).toList();
                                   List<Contact> contactList = value.contacts!.where((element) => element.phones![0].value.reverse.substring(0,10).reverse == data[index]['user1'] || element.phones![0].value.reverse.substring(0,10).reverse == data[index]['user2']).toList();
-                                  List chat = chatSnap.data!.docs.where((element) => user[0]['phone'] == element['sender'] || user[0]['phone'] == element['receiver']).toList();
+                                  List chat = chatSnap.data!.docs.where((element) => (user[0]['phone'] == element['sender'] && auth!.phoneNumber.reverse.substring(0,10).reverse == element['receiver']) || (user[0]['phone'] == element['receiver'] && auth!.phoneNumber.reverse.substring(0,10).reverse == element['sender'])).toList();
                                   return ListTile(
                                     onTap: () {
                                       String phone = data[index]['user1'] == auth!.phoneNumber.reverse.substring(0,10).reverse ? data[index]['user2'] : data[index]['user1'];
@@ -175,21 +175,21 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                         ),
                                       ),
                                     ),
-                                    trailing: Column(
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Text("9.32 AM",style: GoogleFonts.nunito(),),
-                                        Container(
-                                          height: 20,
-                                          width: 20,
-                                          decoration: BoxDecoration(
-                                              color: Color(0xFF0C63EE),
-                                              borderRadius: BorderRadius.circular(100)
-                                          ),
-                                          child: Center(child: Text("3",style: GoogleFonts.nunito(color: Colors.white,fontWeight: FontWeight.bold),)),
-                                        )
-                                      ],
-                                    ),
+                                    // trailing: Column(
+                                    //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    //   children: [
+                                    //     Text("9.32 AM",style: GoogleFonts.nunito(),),
+                                    //     Container(
+                                    //       height: 20,
+                                    //       width: 20,
+                                    //       decoration: BoxDecoration(
+                                    //           color: Color(0xFF0C63EE),
+                                    //           borderRadius: BorderRadius.circular(100)
+                                    //       ),
+                                    //       child: Center(child: Text("3",style: GoogleFonts.nunito(color: Colors.white,fontWeight: FontWeight.bold),)),
+                                    //     )
+                                    //   ],
+                                    // ),
                                   );
                                 },);
                               });

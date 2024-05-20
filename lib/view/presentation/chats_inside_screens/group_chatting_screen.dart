@@ -105,28 +105,28 @@ class _GroupChattingScreenState extends State<GroupChattingScreen> {
             );
       },),
         titleSpacing: 0,
-        actions: [
-          InkWell(
-            overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent),
-            onTap: () {
-              VideoCallScreen().launch(context,pageRouteAnimation: PageRouteAnimation.Slide);
-            },
-            child: const Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Icon(Icons.videocam_rounded),
-            ),
-          ),
-          InkWell(
-            overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent),
-            onTap: () {
-              VoiceCallScreen().launch(context,pageRouteAnimation: PageRouteAnimation.Slide);
-            },
-            child: const Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Icon(Icons.call),
-            ),
-          )
-        ],
+        // actions: [
+        //   InkWell(
+        //     overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent),
+        //     onTap: () {
+        //       VideoCallScreen().launch(context,pageRouteAnimation: PageRouteAnimation.Slide);
+        //     },
+        //     child: const Padding(
+        //       padding: EdgeInsets.all(10.0),
+        //       child: Icon(Icons.videocam_rounded),
+        //     ),
+        //   ),
+        //   InkWell(
+        //     overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent),
+        //     onTap: () {
+        //       VoiceCallScreen().launch(context,pageRouteAnimation: PageRouteAnimation.Slide);
+        //     },
+        //     child: const Padding(
+        //       padding: EdgeInsets.all(10.0),
+        //       child: Icon(Icons.call),
+        //     ),
+        //   )
+        // ],
       ),
       body: SafeArea(
         child: Consumer<GroupScreenProvider>(

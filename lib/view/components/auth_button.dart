@@ -10,7 +10,7 @@ class AuthButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-        onTap: onTap,
+        onTap: loading?null: onTap,
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 30,vertical: 10),
           decoration: BoxDecoration(

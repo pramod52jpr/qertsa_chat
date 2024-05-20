@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:app_settings/app_settings.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -14,10 +15,12 @@ import 'package:qertsa/view/presentation/contact_screen.dart';
 
 class NotificationServices{
   FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+// local notification code -----------------------------------------------------------------------------------
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   void requestNotificationPermission()async{
-    NotificationSettings settings = await messaging.requestPermission(
+    NotificationSettings notificationSettings = await messaging.requestPermission(
       alert: true,
       announcement: true,
       badge: true,
@@ -26,9 +29,9 @@ class NotificationServices{
       provisional: true,
       sound: true,
     );
-    if(settings.authorizationStatus == AuthorizationStatus.authorized){
+    if(notificationSettings.authorizationStatus == AuthorizationStatus.authorized){
       debugPrint("user granted permission");
-    }else if(settings.authorizationStatus == AuthorizationStatus.provisional){
+    }else if(notificationSettings.authorizationStatus == AuthorizationStatus.provisional){
       debugPrint("user provisional permission");
     }else{
       AppSettings.openAppSettings();
@@ -45,7 +48,7 @@ class NotificationServices{
     );
     await flutterLocalNotificationsPlugin.initialize(
         initializationSettings,
-      onDidReceiveNotificationResponse: (details) {
+      onDidReceiveNotificationResponse: (payload) {
           handleMessage(context, message);
       },
     );
@@ -74,7 +77,7 @@ class NotificationServices{
       channelDescription: "Qertsa description",
       importance: Importance.high,
       priority: Priority.high,
-      visibility: NotificationVisibility.public,
+      // visibility: NotificationVisibility.public,
       ticker: 'ticker',
       icon: '@mipmap/launcher_icon',
     );
@@ -87,12 +90,14 @@ class NotificationServices{
       android: androidNotificationDetails,
       iOS: darwinNotificationDetails,
     );
-    flutterLocalNotificationsPlugin.show(
-      0,
-      message.notification!.title.toString(),
-      message.notification!.body.toString(),
-      notificationDetails,
-    );
+    await Future.delayed(Duration.zero,() {
+      flutterLocalNotificationsPlugin.show(
+        0,
+        message.notification!.title.toString(),
+        message.notification!.body.toString(),
+        notificationDetails,
+      );
+    },);
   }
 
   Future<void> setupInteractMessage(BuildContext context)async{
@@ -110,10 +115,35 @@ class NotificationServices{
       ChattingScreen(phoneNo: message.data['number']).launch(context,pageRouteAnimation: PageRouteAnimation.Slide);
     }
     if(message.data["type"] == "videoCall"){
-       VideoCallScreen(token: message.data['token']).launch(context,pageRouteAnimation: PageRouteAnimation.Slide);
+       // VideoCallScreen(token: message.data['token']).launch(context,pageRouteAnimation: PageRouteAnimation.Slide);
     }
   }
+// local notification code end -------------------------------------------------------------------------
 
+  void requestAwesomePermission(){
+    AwesomeNotifications().isNotificationAllowed().then((value){
+      if(!value){
+        AwesomeNotifications().requestPermissionToSendNotifications();
+      }
+    });
+  }
+
+  Future<void> createNotification(RemoteMessage message)async{
+    AwesomeNotifications().createNotification(
+        content: NotificationContent(
+            id: Random.secure().nextInt(10000),
+            channelKey: "basic_channel",
+            title: message.notification!.title,
+            body: message.notification!.body,
+            notificationLayout: NotificationLayout.BigPicture,
+            largeIcon: "asset://assets/images/qertsa-logo.png",
+          payload: {
+              "type" : message.data['type'],
+              "number" : message.data['number']
+          }
+        )
+    );
+  }
 
   Future<String> getDeviceToken()async{
     String? token = await messaging.getToken();

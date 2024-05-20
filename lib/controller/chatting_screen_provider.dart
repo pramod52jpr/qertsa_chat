@@ -25,9 +25,12 @@ class ChattingScreenProvider with ChangeNotifier{
     notifyListeners();
   }
 
-  void sendAttachment(String type, String receiver)async{
-    _sendLoading = true;
+  void changeSendLoading(bool loading){
+    _sendLoading = loading;
     notifyListeners();
+  }
+  void sendAttachment(String type, String receiver)async{
+    changeSendLoading(true);
     final chatDatabase = FirebaseFirestore.instance.collection("singleChats");
     final singleChatUsers = FirebaseFirestore.instance.collection("singleChatUsersList");
     QuerySnapshot singleChatUsersList = await FirebaseFirestore.instance.collection("singleChatUsersList").get();
@@ -62,8 +65,8 @@ class ChattingScreenProvider with ChangeNotifier{
       });
     }
     await chatDatabase.doc(id).set(data);
+    changeSendLoading(false);
     _image = null;
-    _sendLoading = false;
     notifyListeners();
   }
 

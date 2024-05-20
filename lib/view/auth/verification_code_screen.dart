@@ -7,7 +7,8 @@ import 'package:qertsa/controller/login_screen_provider.dart';
 import 'package:qertsa/view/components/auth_button.dart';
 
 class VerificationCodeScreen extends StatelessWidget {
-  const VerificationCodeScreen({super.key});
+  VerificationCodeScreen({super.key});
+  ValueNotifier<bool> verifyLoading = ValueNotifier(false);
 
   @override
   Widget build(BuildContext context) {
@@ -96,9 +97,20 @@ class VerificationCodeScreen extends StatelessWidget {
                       ],
                     ),
                     20.height,
-                    AuthButton(onTap: () {
-                      loginScreenProvider.verifyCode(context);
-                    }, title: "Verify Now",)
+                    ValueListenableBuilder(
+                      valueListenable: verifyLoading,
+                      builder: (context, loading, child) {
+                      return AuthButton(
+                        loading: loading,
+                        onTap: () {
+                          verifyLoading.value = true;
+                        loginScreenProvider.verifyCode(context).then((value){
+                          verifyLoading.value = false;
+                        }).onError((error, stackTrace){
+                          verifyLoading.value = false;
+                        });
+                      }, title: "Verify Now",);
+                    },)
                   ],
                 ),
               ),

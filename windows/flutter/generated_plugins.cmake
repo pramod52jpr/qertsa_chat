@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   agora_rtc_engine
   audioplayers_windows
+  awesome_notifications
   cloud_firestore
   connectivity_plus
   file_selector_windows
@@ -17,6 +18,8 @@ list(APPEND FLUTTER_PLUGIN_LIST
   permission_handler_windows
   record_windows
   smart_auth
+  zego_express_engine
+  zego_zim
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST
