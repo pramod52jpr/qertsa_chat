@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -138,15 +139,21 @@ class ChatBottomBarProvider with ChangeNotifier{
   void sendNotification(String phoneNo,String fcmToken)async{
     String url = "https://fcm.googleapis.com/fcm/send";
     Map<String,dynamic> data = {
-      "to" : fcmToken,
-      "priority" : "high",
-      "notification" : {
-        "title" : auth!.phoneNumber.reverse.substring(0,10).reverse,
-        "body" : sendMessageController.text,
-      },
+      "registration_ids" : [fcmToken],
+      "mutable_content" : true,
       "data" : {
-        "type" : "chat",
-        "number" : auth!.phoneNumber.reverse.substring(0,10).reverse,
+        "content" : {
+          "id" : Random.secure().nextInt(10000),
+          "channelKey" : "basic_channel",
+          "title" : auth!.phoneNumber.reverse.substring(0,10).reverse,
+          "body" : sendMessageController.text,
+          "notificationLayout" : "BigPicture",
+          "largeIcon" : "asset://assets/images/qertsa-logo.png",
+          "payload": {
+            "type" : "chat",
+            "number" : auth!.phoneNumber.reverse.substring(0,10).reverse
+          }
+        }
       }
     };
     Response response = await post(

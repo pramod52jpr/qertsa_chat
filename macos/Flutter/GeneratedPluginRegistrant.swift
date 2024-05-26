@@ -5,7 +5,6 @@
 import FlutterMacOS
 import Foundation
 
-import agora_rtc_engine
 import audioplayers_darwin
 import awesome_notifications
 import cloud_firestore
@@ -17,7 +16,6 @@ import firebase_messaging
 import firebase_storage
 import flutter_local_notifications
 import geolocator_apple
-import iris_method_channel
 import nb_utils
 import package_info_plus
 import path_provider_foundation
@@ -30,7 +28,6 @@ import zego_express_engine
 import zego_zim
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
-  AgoraRtcNgPlugin.register(with: registry.registrar(forPlugin: "AgoraRtcNgPlugin"))
   AudioplayersDarwinPlugin.register(with: registry.registrar(forPlugin: "AudioplayersDarwinPlugin"))
   AwesomeNotificationsPlugin.register(with: registry.registrar(forPlugin: "AwesomeNotificationsPlugin"))
   FLTFirebaseFirestorePlugin.register(with: registry.registrar(forPlugin: "FLTFirebaseFirestorePlugin"))
@@ -42,7 +39,6 @@ func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   FLTFirebaseStoragePlugin.register(with: registry.registrar(forPlugin: "FLTFirebaseStoragePlugin"))
   FlutterLocalNotificationsPlugin.register(with: registry.registrar(forPlugin: "FlutterLocalNotificationsPlugin"))
   GeolocatorPlugin.register(with: registry.registrar(forPlugin: "GeolocatorPlugin"))
-  IrisMethodChannelPlugin.register(with: registry.registrar(forPlugin: "IrisMethodChannelPlugin"))
   NbUtilsPlugin.register(with: registry.registrar(forPlugin: "NbUtilsPlugin"))
   FPPPackageInfoPlusPlugin.register(with: registry.registrar(forPlugin: "FPPPackageInfoPlusPlugin"))
   PathProviderPlugin.register(with: registry.registrar(forPlugin: "PathProviderPlugin"))

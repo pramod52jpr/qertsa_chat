@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:qertsa/main.dart';
 import 'package:qertsa/model/user_model.dart';
 import 'package:qertsa/notification_services.dart';
 import 'package:qertsa/view/auth/agree_continue_screen.dart';
@@ -108,6 +109,8 @@ class LoginScreenProvider with ChangeNotifier{
             "fcm_token" : token,
           });
         }
+
+        onUserLogin();
         const AgreeAndContinueScreen().launch(context,pageRouteAnimation: PageRouteAnimation.Slide);
       }).onError((error, stackTrace) {
         toast(error.toString());

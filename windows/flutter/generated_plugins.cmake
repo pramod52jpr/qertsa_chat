@@ -3,7 +3,6 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  agora_rtc_engine
   audioplayers_windows
   awesome_notifications
   cloud_firestore
@@ -13,7 +12,6 @@ list(APPEND FLUTTER_PLUGIN_LIST
   firebase_core
   firebase_storage
   geolocator_windows
-  iris_method_channel
   nb_utils
   permission_handler_windows
   record_windows

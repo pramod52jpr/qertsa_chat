@@ -128,23 +128,6 @@ class NotificationServices{
     });
   }
 
-  Future<void> createNotification(RemoteMessage message)async{
-    AwesomeNotifications().createNotification(
-        content: NotificationContent(
-            id: Random.secure().nextInt(10000),
-            channelKey: "basic_channel",
-            title: message.notification!.title,
-            body: message.notification!.body,
-            notificationLayout: NotificationLayout.BigPicture,
-            largeIcon: "asset://assets/images/qertsa-logo.png",
-          payload: {
-              "type" : message.data['type'],
-              "number" : message.data['number']
-          }
-        )
-    );
-  }
-
   Future<String> getDeviceToken()async{
     String? token = await messaging.getToken();
     return token!;

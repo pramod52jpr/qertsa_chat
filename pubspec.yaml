@@ -25,7 +25,7 @@ dependencies:
   contacts_service: ^0.6.3
   permission_handler: ^11.2.0
 #  agora_rtc_engine: ^6.2.6
-  agora_uikit: ^1.3.8
+#  agora_uikit: ^1.3.8
   flutter_local_notifications: ^16.3.2
   firebase_core: ^2.25.4
   firebase_auth: ^4.17.4

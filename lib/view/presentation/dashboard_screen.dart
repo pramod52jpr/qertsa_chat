@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -5,15 +6,13 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:qertsa/controller/chat_bottom_bar_provider.dart';
 import 'package:qertsa/controller/dashboard_screen_provider.dart';
+import 'package:qertsa/main.dart';
 import 'package:qertsa/notification_services.dart';
-import 'package:qertsa/view/constants.dart';
 import 'package:qertsa/view/presentation/account_screen.dart';
 import 'package:qertsa/view/presentation/calls_screen.dart';
 import 'package:qertsa/view/presentation/chat_list_screen.dart';
 import 'package:qertsa/view/presentation/contact_screen.dart';
 import 'package:qertsa/view/presentation/groups_screen.dart';
-import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
-import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
 class DashboardScreen extends StatefulWidget {
   DashboardScreen({super.key});
@@ -29,18 +28,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    @override
-    void initState() {
-      // TODO: implement initState
-      super.initState();
-      ZegoUIKitPrebuiltCallInvitationService().init(
-        appID: K.appID /*input your AppID*/,
-        appSign: K.appSign /*input your AppSign*/,
-        userID: K.auth!.uid,
-        userName: K.auth!.phoneNumber!,
-        plugins: [ZegoUIKitSignalingPlugin()],
-      );
-    }
+    AwesomeNotifications().setListeners(
+      onActionReceivedMethod : onActionReceiveMethod,
+      onDismissActionReceivedMethod: onDismissActionReceivedMethod,
+    );
     Provider.of<ChatBottomBarProvider>(context,listen: false).accessContacts().then((value) {
       Provider.of<ChatBottomBarProvider>(context,listen: false).accessContacts();
     });

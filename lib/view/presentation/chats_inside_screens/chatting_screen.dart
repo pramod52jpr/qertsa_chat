@@ -12,9 +12,9 @@ import 'package:provider/provider.dart';
 import 'package:qertsa/controller/chat_bottom_bar_provider.dart';
 import 'package:qertsa/controller/chatting_screen_provider.dart';
 import 'package:qertsa/view/components/auth_button.dart';
+import 'package:qertsa/view/components/utils.dart';
 import 'package:qertsa/view/presentation/chats_inside_screens/image_full_screen.dart';
 import 'package:qertsa/view/presentation/chats_inside_screens/video_call_screen.dart';
-import 'package:qertsa/view/presentation/chats_inside_screens/voice_call_screen.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 
 class ChattingScreen extends StatefulWidget {
@@ -30,11 +30,13 @@ class _ChattingScreenState extends State<ChattingScreen> {
   final chatsData = FirebaseFirestore.instance.collection("singleChats");
   final auth = FirebaseAuth.instance.currentUser;
   ValueNotifier<Contact?> contactDetail = ValueNotifier(null);
+  TextEditingController inviteeUsersIDTextCtrl = TextEditingController();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    inviteeUsersIDTextCtrl.text = widget.phoneNo;
     Provider.of<ChatBottomBarProvider>(context,listen: false).accessContacts().then((value) {
       List<Contact> extractedContacts = Provider.of<ChatBottomBarProvider>(context,listen: false).contacts!.where((element) => element.phones![0].value.reverse.substring(0,10).reverse == widget.phoneNo).toList();
       if(extractedContacts.isNotEmpty){
@@ -137,22 +139,25 @@ class _ChattingScreenState extends State<ChattingScreen> {
               List user = userDataSnapshot.data!.docs.where((element) => element['phone'] == widget.phoneNo).toList();
             return Row(
               children: [
-                InkWell(
-                  overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent),
-                  onTap: () {
-                    VideoCallScreen().launch(context,pageRouteAnimation: PageRouteAnimation.Slide);
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Icon(Icons.videocam_rounded),
-                  ),
-                ),
-                ZegoSendCallInvitationButton(
-                  resourceID: "zegouikit_call",
+                // InkWell(
+                //   overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent),
+                //   onTap: () {
+                //     VideoCallScreen().launch(context,pageRouteAnimation: PageRouteAnimation.Slide);
+                //   },
+                //   child: const Padding(
+                //     padding: EdgeInsets.all(10.0),
+                //     child: Icon(Icons.videocam_rounded),
+                //   ),
+                // ),
+                sendCallButton(
                   isVideoCall: true,
-                  invitees: [
-                    ZegoUIKitUser(id: user[0]['uid'], name: user[0]['name'])
-                  ],
+                  inviteeUsersIDTextCtrl: inviteeUsersIDTextCtrl,
+                  onCallFinished: onSendCallInvitationFinished,
+                ),
+                sendCallButton(
+                  isVideoCall: false,
+                  inviteeUsersIDTextCtrl: inviteeUsersIDTextCtrl,
+                  onCallFinished: onSendCallInvitationFinished,
                 ),
               ],
             );
@@ -205,6 +210,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
                         return ListView.builder(
                           itemCount: data.length,
                           reverse: true,
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           itemBuilder: (context, index) {
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -404,6 +410,35 @@ class _ChattingScreenState extends State<ChattingScreen> {
         },),
       ),
     );
+  }
+  void onSendCallInvitationFinished(
+      String code,
+      String message,
+      List<String> errorInvitees,
+      ) {
+    if (errorInvitees.isNotEmpty) {
+      var userIDs = '';
+      for (var index = 0; index < errorInvitees.length; index++) {
+        if (index >= 5) {
+          userIDs += '... ';
+          break;
+        }
+
+        final userID = errorInvitees.elementAt(index);
+        userIDs += '$userID ';
+      }
+      if (userIDs.isNotEmpty) {
+        userIDs = userIDs.substring(0, userIDs.length - 1);
+      }
+
+      var message = "User doesn't exist or is offline: $userIDs";
+      if (code.isNotEmpty) {
+        message += ', code: $code, message:$message';
+      }
+      Utils.showFlushBar(context, message, MessageType.success);
+    } else if (code.isNotEmpty) {
+      Utils.showFlushBar(context, "User is logout! try again later", MessageType.info);
+    }
   }
 }
 
@@ -633,4 +668,46 @@ class ChatBottomBar extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget sendCallButton({
+  required bool isVideoCall,
+  required TextEditingController inviteeUsersIDTextCtrl,
+  void Function(String code, String message, List<String>)? onCallFinished,
+}) {
+  return ValueListenableBuilder<TextEditingValue>(
+    valueListenable: inviteeUsersIDTextCtrl,
+    builder: (context, inviteeUserID, _) {
+      final invitees =
+      getInvitesFromTextCtrl(inviteeUsersIDTextCtrl.text.trim());
+
+      return ZegoSendCallInvitationButton(
+        isVideoCall: isVideoCall,
+        invitees: invitees,
+        resourceID: 'qertsa_chat',
+        iconSize: const Size(40, 40),
+        buttonSize: const Size(50, 50),
+        icon: ButtonIcon(icon: Icon(isVideoCall ? Icons.videocam_rounded : Icons.call),backgroundColor: Colors.transparent),
+        onPressed: onCallFinished,
+      );
+    },
+  );
+}
+
+List<ZegoUIKitUser> getInvitesFromTextCtrl(String textCtrlText) {
+  final invitees = <ZegoUIKitUser>[];
+
+  final inviteeIDs = textCtrlText.trim().replaceAll('，', '');
+  inviteeIDs.split(',').forEach((inviteeUserID) {
+    if (inviteeUserID.isEmpty) {
+      return;
+    }
+
+    invitees.add(ZegoUIKitUser(
+      id: inviteeUserID,
+      name: 'user_$inviteeUserID',
+    ));
+  });
+
+  return invitees;
 }
